@@ -1,0 +1,26 @@
+---
+-
+  connection: local
+  gather_facts: false
+  hosts: ios-devices
+  name: "show version"
+  tasks:
+    -
+      ios_command:
+        commands: "show version"
+        provider: "{{ cli }}"
+      name: "show version"
+      register: output
+    -
+      debug:
+        var: output.stdout
+      name: "show output"
+    -
+      copy: "content=\"{{ output }}\" dest=./output/{{ inventory_hostname }}.txt"
+      name: "copy output to file"
+  vars:
+    cli:
+      host: "{{ ansible_host }}"
+      password: "{{ ansible_password }}"
+      username: "{{ ansible_user }}"
+...
